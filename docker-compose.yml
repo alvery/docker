@@ -1,0 +1,60 @@
+version: '2'
+services:
+  
+  nginx:
+    build: ./nginx/
+    ports:
+      - 8084:80
+    links:
+      - php
+    volumes_from:
+      - app
+    networks:
+      - network1
+
+  php:
+    build: ./php/
+    expose:
+      - 9000
+    links:
+      - mysql
+      - redis
+    volumes_from:
+      - app
+    networks:
+      - network1
+
+  app:
+    build: ./app/
+    volumes:
+      - ./data:/var/www/html
+    networks:
+      - network1
+
+  redis:
+    image: redis:latest
+    volumes:
+      - /var/lib/redis
+    restart: always
+    ports:
+      - 6379:6379
+    networks:
+      - network1
+  
+  mysql:
+    image: mysql:latest
+    volumes:
+        - /var/lib/mysql
+    environment:
+        MYSQL_ROOT_PASSWORD: secret
+        MYSQL_DATABASE: project
+        MYSQL_USER: project
+        MYSQL_PASSWORD: project
+    ports:
+     - 3307:3306
+    networks:
+      - network1
+
+networks:
+  network1:
+    driver: bridge
