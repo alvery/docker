@@ -60,7 +60,7 @@ services:
   app:
     build: ./app/
     volumes:
-      - ~/PhpstormProjects/rline/mom_backend:/var/www/html
+      - #PATH#:/var/www/html
     networks:
       app_subnet:
         ipv4_address: 172.20.1.6

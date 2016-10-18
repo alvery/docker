@@ -5,14 +5,29 @@ function prompt(){
   echo "Do you wish to autodeploy mom_backend?"
   select yn in "Yes" "No"; do
       case $yn in
-          Yes ) change_host; break;;
+          Yes ) exec; break;;
           No ) exit;;
       esac
   done
 
 }
 
-function change_host(){
+
+# Init
+function exec(){
+
+  # Prepare
+  set_hostname
+  set_project_path
+  add_subnetwork
+
+  # Ready to deploy
+  deploy
+
+}
+
+# Set project hostname
+function set_hostname(){
 
   echo "Specify the hostname. By default: mom_backend.app"
   read name
@@ -24,7 +39,26 @@ function change_host(){
     hostname="$name"
   fi
 
-  #etc_hosts_add "$hostname"
+  etc_hosts_add "$hostname"
+
+}
+
+# Set project path
+function set_project_path(){
+
+  echo "Specify your project root directory. For example: ~/PhpstormProjects/mom_backend"
+  read directory
+
+  if [ ! -z "$directory" ]
+  then
+    directory="$directory"
+  else
+    echo "No root directory specified. Exiting.."
+    exit;
+  fi
+
+  generate_docker_yml "$directory"
+
 }
 
 # Add nginx host to hosts file
@@ -58,11 +92,36 @@ function etc_hosts_add(){
 # Add network subnet for our containers
 function add_subnetwork(){
 
-  docker network create --gateway 172.20.1.1 --subnet 172.20.1.0/24 app_subnet
+  subnet='app_subnet2'
+  exists=$(docker network ls | grep -E '(^| )'$subnet'( |$)' | wc -l)
+
+  if [[ $exists > 0 ]]
+  then
+    echo "Subnetwork $subnet already exists"
+  else
+    echo "Subnetwork $subnet doesnt exists. Creating.."
+    docker network create --gateway 172.20.1.1 --subnet 172.20.1.0/24 '$subnet'
+  fi
 
 }
 
 
+# Generate docker-compose.yml
+function generate_docker_yml(){
+
+  path="$(echo -e "${1}" | tr -d '[[:space:]]')"
+  cat docker-compose.example | sed -e 's|\#PATH\#|'$path'|g' > docker-compose.yml
+
+}
+
+function deploy(){
+
+  echo "Ready to deploy!"
+  echo "\Started..";
+  docker-compose up
+
+
+}
 
 
 
