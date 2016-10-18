@@ -40,6 +40,8 @@ function set_hostname(){
   fi
 
   etc_hosts_add "$hostname"
+  etc_hosts_add docs."$hostname"
+
   generate_nginx_conf "$hostname"
 
 }
@@ -129,8 +131,9 @@ function deploy(){
 
   echo "Ready to deploy!"
   echo "\Started..";
+  docker-compose build --no-cache
   docker-compose up
-
+  #docker-compose stop
 
 }
 
