@@ -1,8 +1,17 @@
 # Docker Local Development
 
 ### Prerequisities
-* Install docker-engine
-* Install docker-compose
+* Install `docker-engine`: <a href="https://docker.github.io/engine/installation/">Docker engine instructions</a>
+
+* Install `docker-compose`: <a href="https://docs.docker.com/compose/install/">Docker compose instructions</a>
+
+Before deploying check your installation:
+```
+$ docker run hello-world
+$ docker-compose --version
+```
+
+
 
 ### Installation
 
@@ -11,12 +20,12 @@
 $ ./autodeploy.sh
 ```
 
-3) After all is done you can simply de-attach <Ctrl+C>. This will stop all containers. Now you can start them in background:
+2) After all is done you can simply de-attach <Ctrl+C>. This will stop all containers. Now you can start them in background:
 ```
 $ docker-compose up -d
 ```
 
-4) To stop them type:
+3) To stop them type:
 ```
 $ docker-compose stop
 ```
