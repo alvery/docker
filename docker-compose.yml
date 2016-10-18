@@ -59,6 +59,9 @@ services:
 
   app:
     build: ./app/
+    depends_on:
+      - mysql
+      - redis
     volumes:
       - ~/PhpstormProjects/rline/mom_backend:/var/www/html
     networks:

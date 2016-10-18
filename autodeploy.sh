@@ -29,17 +29,18 @@ function exec(){
 # Set project hostname
 function set_hostname(){
 
-  echo "Specify the hostname. By default: mom_backend.app"
+  echo "Specify the hostname. By default: mombackend.app"
   read name
 
   if [ ! -n "$name" ]
   then
-    hostname="mom_backend.app"
+    hostname="mombackend.app"
   else
     hostname="$name"
   fi
 
   etc_hosts_add "$hostname"
+  generate_nginx_conf "$hostname"
 
 }
 
@@ -86,6 +87,16 @@ function etc_hosts_add(){
       echo "Adding new hosts entry."
       echo "$host_entry" | sudo tee -a /etc/hosts > /dev/null
   fi
+
+}
+
+# Add main host and docs to nginx file
+function generate_nginx_conf(){
+
+  host_name="$1"
+  path=./nginx
+
+  cat $path/yii.conf.example | sed -e 's|\#HOSTNAME\#|'$host_name'|g' > $path/yii.conf
 
 }
 

@@ -59,6 +59,10 @@ services:
 
   app:
     build: ./app/
+    depends_on:
+      - php
+      - mysql
+      - redis
     volumes:
       - #PATH#:/var/www/html
     networks:

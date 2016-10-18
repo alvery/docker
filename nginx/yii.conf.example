@@ -1,6 +1,6 @@
 server {
     set $host_path "/var/www/";
-    server_name  mombackend.app;
+    server_name  #HOSTNAME#;
     root   $host_path/html/web;
     set $yii_bootstrap "index.php";
 
@@ -52,7 +52,7 @@ server {
 
 server {
     listen       80;
-    server_name  docs.mombackend.app;
+    server_name  docs.#HOSTNAME#;
 
     error_log  STDOUT;
 

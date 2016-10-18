@@ -1,6 +1,10 @@
 #!/bin/bash
 
+# Change permission for /runtime/logs
+chmod 777 ./runtime
+
 # Composer install dependencies
+composer global require "fxp/composer-asset-plugin:~1.1.1"
 /usr/local/bin/composer install
 
 # Rename config files
@@ -33,5 +37,5 @@ fi
 # Start DB migrations
 ./yii migrate --interactive=0
 
-# Change permission for /runtime/logs
-chmod 777 ./runtime
+# Generate api docs
+./yii gendoc
